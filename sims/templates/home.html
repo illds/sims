@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1 class="text-center border-bottom">Sims Map</h1>
+    <div id="plot-container" class="border border-dark"></div>
+    <script>
+        // Загружаем данные из Flask-приложения
+        const entities = {{ entities | tojson | safe }};
+
+        // Создаем координатную плоскость с помощью D3.js
+        const width = 1000;
+        const height = 500;
+
+        const svg = d3.select("#plot-container")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Добавляем точки на плоскость с использованием цикла for
+        {% for entity in entities %}
+            const point{{ entity.id }} = svg.append("circle")
+                .attr("cx", {{ 500 + entity.x }})
+                .attr("cy", {{ 250 + entity.y }})
+                .attr("r", 5)
+                .attr("fill", "blue")
+                .attr("class", "entity-point")
+                .on("click", function () {
+                    const url = "{{ url_for('human', human_id=entity.id) }}";
+                    window.location.href = url;
+                });
+        {% endfor %}
+    </script>
+{% endblock content %}
