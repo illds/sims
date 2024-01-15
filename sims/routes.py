@@ -3,23 +3,6 @@ from sims import app, db, bcrypt
 from sims.forms import RegistrationForm, LoginForm, HumanForm, UpdateAccountForm
 from sims.models import User, Human
 from flask_login import login_user, current_user, logout_user, login_required
-import matplotlib.pyplot as plt
-import os
-
-posts = [
-    {
-        'author': 'Corey Schafer',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'April 20, 2018'
-    },
-    {
-        'author': 'Jane Doe',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'April 21, 2018'
-    }
-]
 
 
 # entities = [
@@ -121,7 +104,7 @@ def new_human():
         db.session.commit()
         flash('Human has been created!', 'success')
         return redirect(url_for('home'))
-    return render_template('create_human.html', title='New entity',
+    return render_template('create_human.html', title='New human',
                            form=form, legend='New Post')
 
 
@@ -129,3 +112,42 @@ def new_human():
 def human(human_id):
     human = Human.query.get_or_404(human_id)
     return render_template('human.html', human=human)
+
+
+@app.route("/human/<int:human_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_human(human_id):
+    human = Human.query.get_or_404(human_id)
+    # if human.author != current_user:
+        # abort(403)
+    form = HumanForm()
+    if form.validate_on_submit():
+        human.name = form.name.data
+        human.surname = form.surname.data
+        human.age = form.age.data
+        human.x_coordinate = form.x_coordinate.data
+        human.y_coordinate = form.y_coordinate.data
+        db.session.commit()
+        flash('Your human has been updated!', 'success')
+        return redirect(url_for('human', human_id=human.id))
+    elif request.method == 'GET':
+        form.name.data = human.name
+        form.surname.data = human.surname
+        form.age.data = human.age
+        form.x_coordinate.data = human.x_coordinate
+        form.y_coordinate.data = human.y_coordinate
+    return render_template('create_human.html', form=form, legend='Update Human', title='Update Post')
+
+
+@app.route("/human/<int:human_id>/delete", methods=['POST'])
+@login_required
+def delete_human(human_id):
+    human = Human.query.get_or_404(human_id)
+
+    # if human.author != current_user:
+    #     abort(403)
+
+    db.session.delete(human)
+    db.session.commit()
+    flash('Human has been deleted!', 'success')
+    return redirect(url_for('home'))

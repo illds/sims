@@ -62,4 +62,4 @@ class HumanForm(FlaskForm):
     age = IntegerField('Age', validators=[DataRequired()])
     x_coordinate = IntegerField('X coordinate', validators=[DataRequired()])
     y_coordinate = IntegerField('Y coordinate', validators=[DataRequired()])
-    submit = SubmitField('Create Human')
+    submit = SubmitField('Done')
