@@ -15,14 +15,25 @@
             .attr("width", width)
             .attr("height", height);
 
-        // Добавляем точки на плоскость с использованием цикла for
+        // Добавляем точки и имена на плоскость с использованием цикла for
         {% for entity in entities %}
             const point{{ entity.id }} = svg.append("circle")
-                .attr("cx", {{ 500 + entity.x }})
-                .attr("cy", {{ 250 - entity.y }})
+                .attr("cx", width / 2 + {{ entity.x }})
+                .attr("cy", height / 2 - {{ entity.y }})
                 .attr("r", 5)
-                .attr("fill", "blue")
+                .attr("fill", "green")
                 .attr("class", "entity-point")
+                .on("click", function () {
+                    const url = "{{ url_for('humans.human', human_id=entity.id) }}";
+                    window.location.href = url;
+                });
+
+            svg.append("text")
+                .attr("x", width / 2 + {{ entity.x }})  // Adjust the label position
+                .attr("y", height / 2 - {{ entity.y }})
+                .text("{{ entity.name }}")
+                .attr("fill", "black")
+                .style("font-size", "10px")
                 .on("click", function () {
                     const url = "{{ url_for('humans.human', human_id=entity.id) }}";
                     window.location.href = url;

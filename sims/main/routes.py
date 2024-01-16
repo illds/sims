@@ -10,7 +10,9 @@ def home():
     entities = []
     for human in humans:
         entities.append({
-            "id": human.id, "type": "human", "x": human.x_coordinate, "y": human.y_coordinate
+            "id": human.id, "name": human.name,
+            "surname": human.surname, "age": human.age,
+            "x": human.x_coordinate, "y": human.y_coordinate
         })
 
     return render_template('home.html', entities=entities)
