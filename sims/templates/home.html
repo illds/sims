@@ -24,12 +24,12 @@
                 .attr("fill", "blue")
                 .attr("class", "entity-point")
                 .on("click", function () {
-                    const url = "{{ url_for('human', human_id=entity.id) }}";
+                    const url = "{{ url_for('humans.human', human_id=entity.id) }}";
                     window.location.href = url;
                 });
         {% endfor %}
     </script>
     <div class="mt-3 text-center">
-        <a href="{{ url_for('new_human') }}" class="btn btn-success">New Human</a>
+        <a href="{{ url_for('humans.new_human') }}" class="btn btn-success">New Human</a>
     </div>
 {% endblock content %}

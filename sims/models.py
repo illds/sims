@@ -2,6 +2,7 @@ from datetime import datetime
 from sims import db, login_manager
 from flask_login import UserMixin
 
+
 # To create db with models:
 # from project import app, db
 # app.app_context().push()
