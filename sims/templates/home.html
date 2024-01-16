@@ -3,9 +3,6 @@
     <h1 class="text-center border-bottom">Sims Map</h1>
     <div id="plot-container" class="border border-dark"></div>
     <script>
-        // Загружаем данные из Flask-приложения
-        const entities = {{ entities | tojson | safe }};
-
         // Создаем координатную плоскость с помощью D3.js
         const width = 1000;
         const height = 500;
@@ -16,31 +13,57 @@
             .attr("height", height);
 
         // Добавляем точки и имена на плоскость с использованием цикла for
-        {% for entity in entities %}
-            const point{{ entity.id }} = svg.append("circle")
-                .attr("cx", width / 2 + {{ entity.x }})
-                .attr("cy", height / 2 - {{ entity.y }})
+        {% for human in humans %}
+            const point{{ human.id }} = svg.append("circle")
+                .attr("cx", width / 2 + {{ human.x }})
+                .attr("cy", height / 2 - {{ human.y }})
                 .attr("r", 5)
                 .attr("fill", "green")
-                .attr("class", "entity-point")
+                .attr("class", "human-point")
                 .on("click", function () {
-                    const url = "{{ url_for('humans.human', human_id=entity.id) }}";
+                    const url = "{{ url_for('humans.human', human_id=human.id) }}";
                     window.location.href = url;
                 });
 
             svg.append("text")
-                .attr("x", width / 2 + {{ entity.x }})  // Adjust the label position
-                .attr("y", height / 2 - {{ entity.y }})
-                .text("{{ entity.name }}")
+                .attr("x", width / 2 + {{ human.x }})  // Adjust the label position
+                .attr("y", height / 2 - {{ human.y }})
+                .text("{{ human.name }}")
                 .attr("fill", "black")
                 .style("font-size", "10px")
                 .on("click", function () {
-                    const url = "{{ url_for('humans.human', human_id=entity.id) }}";
+                    const url = "{{ url_for('humans.human', human_id=human.id) }}";
+                    window.location.href = url;
+                });
+        {% endfor %}
+
+        {% for house in houses %}
+            const house{{ house.id }} = svg.append("rect")
+                .attr("x", width / 2 + {{ house.x }})
+                .attr("y", height / 2 - {{ house.y }})
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("fill", "grey")
+                .attr("class", "house-point")
+                .on("click", function () {
+                    const url = "{{ url_for('houses.house', house_id=house.id) }}";
+                    window.location.href = url;
+                });
+
+            svg.append("text")
+                .attr("x", width / 2 + {{ house.x }} - 20)
+                .attr("y", height / 2 - {{ house.y }})
+                .text("{{ house.owner_family }}'s house")
+                .attr("fill", "black")
+                .style("font-size", "10px")
+                .on("click", function () {
+                    const url = "{{ url_for('houses.house', house_id=house.id) }}";
                     window.location.href = url;
                 });
         {% endfor %}
     </script>
     <div class="mt-3 text-center">
         <a href="{{ url_for('humans.new_human') }}" class="btn btn-success">New Human</a>
+        <a href="{{ url_for('houses.new_house') }}" class="btn btn-success">New House</a>
     </div>
 {% endblock content %}

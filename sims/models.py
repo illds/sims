@@ -47,3 +47,16 @@ class Human(db.Model):
 
     def __repr__(self):
         return f"Human('{self.name}', '{self.id}', x={self.x_coordinate}, y={self.y_coordinate})"
+
+
+class House(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    owner_family = db.Column(db.String(100), nullable=False)
+    type = db.Column(db.String(100), nullable=False)
+    room_number = db.Column(db.Integer, nullable=False, default=1)
+    floor_number = db.Column(db.Integer, nullable=False, default=1)
+    x_coordinate = db.Column(db.Integer, nullable=False, default=0)
+    y_coordinate = db.Column(db.Integer, nullable=False, default=0)
+
+    def __repr__(self):
+        return f"House('{self.owner_family}', '{self.id}', x={self.x_coordinate}, y={self.y_coordinate})"
