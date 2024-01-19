@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from sims.models import Human, House
+from sims.models import Human, House, Pet
 
 main = Blueprint('main', __name__)
 
@@ -15,6 +15,15 @@ def home():
             "x": human.x_coordinate, "y": human.y_coordinate
         })
 
+    pets_query = Pet.query.all()
+    pets = []
+    for pet in pets_query:
+        pets.append({
+            "id": pet.id, "name": pet.name,
+            "type": pet.type, "breed": pet.breed, "age": pet.age,
+            "x": pet.x_coordinate, "y": pet.y_coordinate
+        })
+
     houses_query = House.query.all()
     houses = []
     for house in houses_query:
@@ -24,7 +33,7 @@ def home():
             "x": house.x_coordinate, "y": house.y_coordinate
         })
 
-    return render_template('home.html', humans=humans, houses=houses)
+    return render_template('home.html', humans=humans, houses=houses, pets=pets)
 
 
 @main.route("/about")

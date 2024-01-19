@@ -19,14 +19,14 @@ def new_house():
         db.session.commit()
         flash('House has been created!', 'success')
         return redirect(url_for('main.home'))
-    return render_template('create_house.html', title='New house',
-                           form=form, legend='New Post')
+    return render_template('houses/create_house.html', title='New house',
+                           form=form, legend='New House')
 
 
 @houses.route("/house/<int:house_id>")
 def house(house_id):
     house = House.query.get_or_404(house_id)
-    return render_template('house.html', house=house)
+    return render_template('houses/house.html', house=house)
 
 
 @houses.route("/house/<int:house_id>/update", methods=['GET', 'POST'])
@@ -53,7 +53,7 @@ def update_house(house_id):
         form.floor_number.data = house.floor_number
         form.x_coordinate.data = house.x_coordinate
         form.y_coordinate.data = house.y_coordinate
-    return render_template('create_house.html', form=form, legend='Update House', title='Update House')
+    return render_template('houses/create_house.html', form=form, legend='Update House', title='Update House')
 
 
 @houses.route("/house/<int:house_id>/delete", methods=['POST'])

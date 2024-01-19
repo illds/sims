@@ -12,12 +12,12 @@
             .attr("width", width)
             .attr("height", height);
 
-        // Добавляем точки и имена на плоскость с использованием цикла for
+        // Добавляем точки и имена людей (humans) на плоскость с использованием цикла for
         {% for human in humans %}
-            const point{{ human.id }} = svg.append("circle")
+            const human{{ human.id }} = svg.append("circle")
                 .attr("cx", width / 2 + {{ human.x }})
                 .attr("cy", height / 2 - {{ human.y }})
-                .attr("r", 5)
+                .attr("r", 8)
                 .attr("fill", "green")
                 .attr("class", "human-point")
                 .on("click", function () {
@@ -26,7 +26,7 @@
                 });
 
             svg.append("text")
-                .attr("x", width / 2 + {{ human.x }})  // Adjust the label position
+                .attr("x", width / 2 + {{ human.x }})
                 .attr("y", height / 2 - {{ human.y }})
                 .text("{{ human.name }}")
                 .attr("fill", "black")
@@ -37,12 +37,36 @@
                 });
         {% endfor %}
 
+        {% for pet in pets %}
+            const pet{{ pet.id }} = svg.append("circle")
+                .attr("cx", width / 2 + {{ pet.x }})
+                .attr("cy", height / 2 - {{ pet.y }})
+                .attr("r", 5)
+                .attr("fill", "red")
+                .attr("class", "pet-point")
+                .on("click", function () {
+                    const url = "{{ url_for('pets.pet', pet_id=pet.id) }}";
+                    window.location.href = url;
+                });
+
+            svg.append("text")
+                .attr("x", width / 2 + {{ pet.x }})
+                .attr("y", height / 2 - {{ pet.y }})
+                .text("{{ pet.name }}")
+                .attr("fill", "black")
+                .style("font-size", "10px")
+                .on("click", function () {
+                    const url = "{{ url_for('pets.pet', pet_id=pet.id) }}";
+                    window.location.href = url;
+                });
+        {% endfor %}
+
         {% for house in houses %}
             const house{{ house.id }} = svg.append("rect")
                 .attr("x", width / 2 + {{ house.x }})
                 .attr("y", height / 2 - {{ house.y }})
-                .attr("width", 20)
-                .attr("height", 20)
+                .attr("width", 30)
+                .attr("height", 30)
                 .attr("fill", "grey")
                 .attr("class", "house-point")
                 .on("click", function () {
@@ -64,6 +88,7 @@
     </script>
     <div class="mt-3 text-center">
         <a href="{{ url_for('humans.new_human') }}" class="btn btn-success">New Human</a>
+        <a href="{{ url_for('pets.new_pet') }}" class="btn btn-success">New Pet</a>
         <a href="{{ url_for('houses.new_house') }}" class="btn btn-success">New House</a>
     </div>
 {% endblock content %}

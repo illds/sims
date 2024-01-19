@@ -17,14 +17,14 @@ def new_human():
         db.session.commit()
         flash('Human has been created!', 'success')
         return redirect(url_for('main.home'))
-    return render_template('create_human.html', title='New human',
-                           form=form, legend='New Post')
+    return render_template('humans/create_human.html', title='New human',
+                           form=form, legend='New Human')
 
 
 @humans.route("/human/<int:human_id>")
 def human(human_id):
     human = Human.query.get_or_404(human_id)
-    return render_template('human.html', human=human)
+    return render_template('humans/human.html', human=human)
 
 
 @humans.route("/human/<int:human_id>/update", methods=['GET', 'POST'])
@@ -49,7 +49,7 @@ def update_human(human_id):
         form.age.data = human.age
         form.x_coordinate.data = human.x_coordinate
         form.y_coordinate.data = human.y_coordinate
-    return render_template('create_human.html', form=form, legend='Update Human', title='Update Post')
+    return render_template('humans/create_human.html', form=form, legend='Update Human', title='Update Post')
 
 
 @humans.route("/human/<int:human_id>/delete", methods=['POST'])
