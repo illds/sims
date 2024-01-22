@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.families.forms import FamilyForm
-from sims.models import Human, Family
+from sims.models import Human, Family, Pet
 from flask_login import login_required
 
 families = Blueprint('families', __name__)
@@ -28,7 +28,10 @@ def new_family():
 @families.route("/family/<int:family_id>")
 def family(family_id):
     family = Family.query.get_or_404(family_id)
-    return render_template('families/family.html', family=family)
+    humans_in_family = Human.query.filter_by(family_id=family.id).all()
+    pets_in_family = Pet.query.filter_by(family_id=family.id).all()
+    return render_template('families/family.html', family=family,
+                           humans_in_family=humans_in_family, pets_in_family=pets_in_family)
 
 
 @families.route("/family/<int:family_id>/update", methods=['GET', 'POST'])
@@ -69,22 +72,43 @@ def all_families():
                            families=families)
 
 
-@families.route("/families/<int:human_id>", methods=['GET', 'POST'])
+@families.route("/families/human/<int:human_id>", methods=['GET', 'POST'])
 @login_required
-def list_families(human_id):
+def families_human(human_id):
     families = Family.query.all()
     return render_template('families/families_human.html', title='List of Families',
                            families=families, human_id=human_id)
 
 
-@families.route("/family/join/<int:family_id>/<int:human_id>", methods=['GET', 'POST'])
+@families.route("/families/pet/<int:pet_id>", methods=['GET', 'POST'])
 @login_required
-def join_family(family_id, human_id):
+def families_pet(pet_id):
+    families = Family.query.all()
+    return render_template('families/families_pet.html', title='List of Families',
+                           families=families, pet_id=pet_id)
+
+
+@families.route("/family/human_join/<int:family_id>/<int:human_id>", methods=['GET', 'POST'])
+@login_required
+def human_join_family(family_id, human_id):
     human = Human.query.get_or_404(human_id)
     family = Family.query.get_or_404(family_id)
 
     human.family_id = family_id
     db.session.commit()
 
-    flash(f'{human.name} has joined {family.name}!', 'success')
+    flash(f'{human.name} has joined {family.name} family!', 'success')
     return redirect(url_for('humans.human', human_id=human.id))
+
+
+@families.route("/family/pet_join/<int:family_id>/<int:pet_id>", methods=['GET', 'POST'])
+@login_required
+def pet_join_family(family_id, pet_id):
+    pet = Pet.query.get_or_404(pet_id)
+    family = Family.query.get_or_404(family_id)
+
+    pet.family_id = family_id
+    db.session.commit()
+
+    flash(f'{pet.name} has joined {family.name} family!', 'success')
+    return redirect(url_for('pets.pet', pet_id=pet.id))

@@ -68,8 +68,6 @@ class House(db.Model):
 class Family(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    humans = db.relationship('Human', backref='family', lazy=True)
-    pets = db.relationship('Pet', backref='family', lazy=True)
 
     def __repr__(self):
         return f"Family(id={self.id}, name={self.name}, humans='{self.humans}', pets='{self.pets}')"

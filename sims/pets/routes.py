@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.pets.forms import PetForm
-from sims.models import Pet
+from sims.models import Pet, Family
 from flask_login import login_required
 
 pets = Blueprint('pets', __name__)
@@ -24,15 +24,15 @@ def new_pet():
 @pets.route("/pet/<int:pet_id>")
 def pet(pet_id):
     pet = Pet.query.get_or_404(pet_id)
-    return render_template('pets/pet.html', pet=pet)
+    family = Family.query.get(pet.family_id)
+    return render_template('pets/pet.html', pet=pet, family=family)
 
 
 @pets.route("/pet/<int:pet_id>/update", methods=['GET', 'POST'])
 @login_required
 def update_pet(pet_id):
     pet = Pet.query.get_or_404(pet_id)
-    # if pet.author != current_user:
-        # abort(403)
+
     form = PetForm()
     if form.validate_on_submit():
         pet.name = form.name.data
@@ -58,9 +58,6 @@ def update_pet(pet_id):
 @login_required
 def delete_pet(pet_id):
     pet = Pet.query.get_or_404(pet_id)
-
-    # if pet.author != current_user:
-    #     abort(403)
 
     db.session.delete(pet)
     db.session.commit()

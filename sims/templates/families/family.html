@@ -9,9 +9,15 @@
                     </div>
                     <div class="card-body">
                         <p class="lead">Family: {{ family.name }}</p>
-
+                        {% for human in humans_in_family %}
+                            <p class="lead">Member of family: {{ human.name }} {{ human.surname }}</p>
+                        {% endfor %}
+                        {% for pet in pets_in_family %}
+                            <p class="lead">Member of family: {{ pet.type }} {{ pet.name }}</p>
+                        {% endfor %}
                         <div class="mt-3">
-                            <a href="{{ url_for('families.update_family', family_id=family.id) }}" class="btn btn-primary">Edit</a>
+                            <a href="{{ url_for('families.update_family', family_id=family.id) }}"
+                               class="btn btn-primary">Edit</a>
                             <button class="btn btn-danger" id="deleteBtn" data-toggle="modal"
                                     data-target="#deleteModal">Delete
                             </button>

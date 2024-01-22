@@ -32,8 +32,7 @@ def human(human_id):
 @login_required
 def update_human(human_id):
     human = Human.query.get_or_404(human_id)
-    # if human.author != current_user:
-        # abort(403)
+
     form = HumanForm()
     if form.validate_on_submit():
         human.name = form.name.data

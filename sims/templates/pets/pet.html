@@ -11,9 +11,16 @@
                         <p class="lead">Breed: {{ pet.breed }}</p>
                         <p class="lead">Age: {{ pet.age }}</p>
                         <p class="lead">Coordinates: ({{ pet.x_coordinate }}, {{ pet.y_coordinate }})</p>
+                        {% if family %}
+                            <p class="lead">Family: {{ family.name }}</p>
+                        {% else %}
+                            <p class="lead">Family: Not in the family</p>
+                        {% endif %}
 
                         <div class="mt-3">
                             <a href="{{ url_for('pets.update_pet', pet_id=pet.id) }}" class="btn btn-primary">Edit</a>
+                            <a href="{{ url_for('families.families_pet', pet_id=pet.id) }}"
+                               class="btn btn-primary">Join a Family</a>
                             <button class="btn btn-danger" id="deleteBtn" data-toggle="modal" data-target="#deleteModal">Delete</button>
                         </div>
                     </div>
