@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.humans.forms import HumanForm
-from sims.models import Human
+from sims.models import Human, Family
 from flask_login import login_required
 
 humans = Blueprint('humans', __name__)
@@ -24,7 +24,8 @@ def new_human():
 @humans.route("/human/<int:human_id>")
 def human(human_id):
     human = Human.query.get_or_404(human_id)
-    return render_template('humans/human.html', human=human)
+    family = Family.query.get(human.family_id)
+    return render_template('humans/human.html', human=human, family=family)
 
 
 @humans.route("/human/<int:human_id>/update", methods=['GET', 'POST'])
@@ -49,7 +50,7 @@ def update_human(human_id):
         form.age.data = human.age
         form.x_coordinate.data = human.x_coordinate
         form.y_coordinate.data = human.y_coordinate
-    return render_template('humans/create_human.html', form=form, legend='Update Human', title='Update Post')
+    return render_template('humans/create_human.html', form=form, legend='Update Human', title='Update Human')
 
 
 @humans.route("/human/<int:human_id>/delete", methods=['POST'])

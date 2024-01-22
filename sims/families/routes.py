@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.families.forms import FamilyForm
-from sims.models import Human
+from sims.models import Human, Family
 from flask_login import login_required
 
 families = Blueprint('families', __name__)
@@ -11,7 +11,6 @@ families = Blueprint('families', __name__)
 @login_required
 def new_family():
     form = FamilyForm()
-
 
     if form.validate_on_submit():
         family = Family(name=form.name.data)
@@ -29,31 +28,23 @@ def new_family():
 @families.route("/family/<int:family_id>")
 def family(family_id):
     family = Family.query.get_or_404(family_id)
-    return render_template('families/Family.html', family=family)
+    return render_template('families/family.html', family=family)
 
 
 @families.route("/family/<int:family_id>/update", methods=['GET', 'POST'])
 @login_required
 def update_family(family_id):
     family = Family.query.get_or_404(family_id)
-    # if family.author != current_user:
-        # abort(403)
+
     form = FamilyForm()
     if form.validate_on_submit():
         family.name = form.name.data
-        family.surname = form.surname.data
-        family.age = form.age.data
-        family.x_coordinate = form.x_coordinate.data
-        family.y_coordinate = form.y_coordinate.data
         db.session.commit()
         flash('Your family has been updated!', 'success')
         return redirect(url_for('families.family', family_id=family.id))
     elif request.method == 'GET':
         form.name.data = family.name
-        form.surname.data = family.surname
-        form.age.data = family.age
-        form.x_coordinate.data = family.x_coordinate
-        form.y_coordinate.data = family.y_coordinate
+
     return render_template('families/create_family.html', form=form, legend='Update Family', title='Update Family')
 
 
@@ -62,10 +53,38 @@ def update_family(family_id):
 def delete_family(family_id):
     family = Family.query.get_or_404(family_id)
 
-    # if family.author != current_user:
-    #     abort(403)
+    Human.query.filter_by(family_id=family.id).update({Human.family_id: None})
 
     db.session.delete(family)
     db.session.commit()
-    flash('Human has been deleted!', 'success')
+    flash('Family has been deleted!', 'success')
     return redirect(url_for('main.home'))
+
+
+@families.route("/families")
+@login_required
+def all_families():
+    families = Family.query.all()
+    return render_template('families/families.html', title='List of Families',
+                           families=families)
+
+
+@families.route("/families/<int:human_id>", methods=['GET', 'POST'])
+@login_required
+def list_families(human_id):
+    families = Family.query.all()
+    return render_template('families/families_human.html', title='List of Families',
+                           families=families, human_id=human_id)
+
+
+@families.route("/family/join/<int:family_id>/<int:human_id>", methods=['GET', 'POST'])
+@login_required
+def join_family(family_id, human_id):
+    human = Human.query.get_or_404(human_id)
+    family = Family.query.get_or_404(family_id)
+
+    human.family_id = family_id
+    db.session.commit()
+
+    flash(f'{human.name} has joined {family.name}!', 'success')
+    return redirect(url_for('humans.human', human_id=human.id))

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <h1>List of Families</h1>
+        <ul class="list-group">
+            {% for family in families %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">{{ family.name }}</h3>
+                    <a href="{{ url_for('families.join_family', family_id=family.id, human_id=human_id) }}" class="btn btn-outline-info">Join</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}
