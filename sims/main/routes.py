@@ -28,7 +28,7 @@ def home():
     houses = []
     for house in houses_query:
         houses.append({
-            "id": house.id, "owner_family": house.owner_family,
+            "id": house.id,
             "room_number": house.room_number, "floor_number": house.floor_number,
             "x": house.x_coordinate, "y": house.y_coordinate
         })

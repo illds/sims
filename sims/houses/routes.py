@@ -12,7 +12,7 @@ houses = Blueprint('houses', __name__)
 def new_house():
     form = HouseForm()
     if form.validate_on_submit():
-        house = House(owner_family=form.owner_family.data, type=form.type.data,
+        house = House(type=form.type.data,
                       room_number=form.room_number.data, floor_number=form.floor_number.data,
                       x_coordinate=form.x_coordinate.data, y_coordinate=form.y_coordinate.data)
         db.session.add(house)
@@ -37,7 +37,6 @@ def update_house(house_id):
     # abort(403)
     form = HouseForm()
     if form.validate_on_submit():
-        house.owner_family = form.owner_family.data
         house.type = form.type.data
         house.room_number = form.room_number.data
         house.floor_number = form.floor_number.data
@@ -47,7 +46,6 @@ def update_house(house_id):
         flash('Your house has been updated!', 'success')
         return redirect(url_for('houses.house', house_id=house.id))
     elif request.method == 'GET':
-        form.owner_family.data = house.owner_family
         form.type.data = house.type
         form.room_number.data = house.room_number
         form.floor_number.data = house.floor_number

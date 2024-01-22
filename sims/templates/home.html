@@ -75,9 +75,9 @@
                 });
 
             svg.append("text")
-                .attr("x", width / 2 + {{ house.x }} - 20)
+                .attr("x", width / 2 + {{ house.x }} -5)
                 .attr("y", height / 2 - {{ house.y }})
-                .text("{{ house.owner_family }}'s house")
+                .text("House")
                 .attr("fill", "black")
                 .style("font-size", "10px")
                 .on("click", function () {
@@ -90,5 +90,6 @@
         <a href="{{ url_for('humans.new_human') }}" class="btn btn-success">New Human</a>
         <a href="{{ url_for('pets.new_pet') }}" class="btn btn-success">New Pet</a>
         <a href="{{ url_for('houses.new_house') }}" class="btn btn-success">New House</a>
+        <a href="{{ url_for('families.new_family') }}" class="btn btn-success">New Family</a>
     </div>
 {% endblock content %}

@@ -20,13 +20,11 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.png')
     password = db.Column(db.String(60), nullable=False)
+
     # posts = db.relationship('Post', backref='author', lazy=True)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
-
-
-
 
 
 class Human(db.Model):
@@ -36,22 +34,10 @@ class Human(db.Model):
     age = db.Column(db.Integer, nullable=False)
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)
     y_coordinate = db.Column(db.Integer, nullable=False, default=0)
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
 
     def __repr__(self):
         return f"Human('{self.name}', '{self.id}', x={self.x_coordinate}, y={self.y_coordinate})"
-
-
-class House(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    owner_family = db.Column(db.String(100), nullable=False)
-    type = db.Column(db.String(100), nullable=False)
-    room_number = db.Column(db.Integer, nullable=False, default=1)
-    floor_number = db.Column(db.Integer, nullable=False, default=1)
-    x_coordinate = db.Column(db.Integer, nullable=False, default=0)
-    y_coordinate = db.Column(db.Integer, nullable=False, default=0)
-
-    def __repr__(self):
-        return f"House('{self.owner_family}', '{self.id}', x={self.x_coordinate}, y={self.y_coordinate})"
 
 
 class Pet(db.Model):
@@ -62,6 +48,30 @@ class Pet(db.Model):
     age = db.Column(db.Integer, nullable=False)
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)
     y_coordinate = db.Column(db.Integer, nullable=False, default=0)
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
 
     def __repr__(self):
         return f"Human('{self.name}', '{self.id}', x={self.x_coordinate}, y={self.y_coordinate})"
+
+
+class House(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(100), nullable=False)
+    room_number = db.Column(db.Integer, nullable=False, default=1)
+    floor_number = db.Column(db.Integer, nullable=False, default=1)
+    x_coordinate = db.Column(db.Integer, nullable=False, default=0)
+    y_coordinate = db.Column(db.Integer, nullable=False, default=0)
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
+
+    def __repr__(self):
+        return f"House('{self.id}', family_id={self.family_id}, x={self.x_coordinate}, y={self.y_coordinate})"
+
+
+class Family(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    humans = db.relationship('Human', backref='family', lazy=True)
+    pets = db.relationship('Pet', backref='family', lazy=True)
+
+    def __repr__(self):
+        return f"Family(id={self.id}, name={self.name}, humans='{self.humans}', pets='{self.pets}')"
