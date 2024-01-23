@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.houses.forms import HouseForm
-from sims.models import House, HouseType
+from sims.models import House, HouseType, Family
 from flask_login import login_required
 
 houses = Blueprint('houses', __name__)
@@ -31,7 +31,8 @@ def new_house():
 @houses.route("/house/<int:house_id>")
 def house(house_id):
     house = House.query.get_or_404(house_id)
-    return render_template('houses/house.html', house=house)
+    family = Family.query.get(house.family_id)
+    return render_template('houses/house.html', house=house, family=family)
 
 
 @houses.route("/house/<int:house_id>/update", methods=['GET', 'POST'])
@@ -73,3 +74,26 @@ def delete_house(house_id):
     db.session.commit()
     flash('House has been deleted!', 'success')
     return redirect(url_for('main.home'))
+
+
+@houses.route("/house/<int:house_id>/add_family/<int:family_id>", methods=['POST', 'GET'])
+@login_required
+def house_add_family(house_id, family_id):
+    house = House.query.get_or_404(house_id)
+    family = Family.query.get_or_404(family_id)
+
+    house.family_id = family.id
+    db.session.commit()
+    flash('House has been deleted!', 'success')
+    return redirect(url_for('main.home'))
+
+
+@houses.route("/house/<int:house_id>/delete", methods=['POST'])
+@login_required
+def house_leave_family(house_id):
+    house = House.query.get_or_404(house_id)
+    house.family_id = None
+
+    db.session.commit()
+    flash('House\'s family has been deleted!', 'success')
+    return redirect(url_for('houses.house'), house_id=house.id)

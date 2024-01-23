@@ -89,6 +89,14 @@ def families_pet(pet_id):
                            families=families, pet_id=pet_id)
 
 
+@families.route("/families/house/<int:house_id>", methods=['GET', 'POST'])
+@login_required
+def families_house(house_id):
+    families = Family.query.all()
+    return render_template('families/families_house.html', title='List of Families',
+                           families=families, house_id=house_id)
+
+
 @families.route("/family/human_join/<int:family_id>/<int:human_id>", methods=['GET', 'POST'])
 @login_required
 def human_join_family(family_id, human_id):
