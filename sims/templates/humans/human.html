@@ -8,16 +8,16 @@
                         <h2 class="text-white">{{ human.name }} {{ human.surname }}</h2>
                     </div>
                     <div class="card-body">
-                        <p class="lead">Gender: {{ human.gender.value }}</p>
-                        <p class="lead">Age: {{ human.age }}</p>
-                        <p class="lead">Gender: {{ human.job.value }}</p>
-                        <p class="lead">Coordinates: ({{ human.x_coordinate }}, {{ human.y_coordinate }})</p>
+                        <p class="lead">🚻 Gender: {{ human.gender.value }}</p>
+                        <p class="lead">🕛 Age: {{ human.age }}</p>
+                        <p class="lead">💼 Gender: {{ human.job.value }}</p>
+                        <p class="lead">📍 Coordinates: ({{ human.x_coordinate }}, {{ human.y_coordinate }})</p>
                         {% if family %}
-                            <p class="lead">Family: {{ family.name }}</p>
+                            <p class="lead">👨‍👨‍👧‍👧 Family: {{ family.name }}</p>
                         {% else %}
-                            <p class="lead">Family: Not in the family</p>
+                            <p class="lead">👨‍👨‍👧‍👧 Family: Not in the family</p>
                         {% endif %}
-                        <p class="lead">Plumbob: {{ human.plumbob.value }}</p>
+                        <p class="lead">🔹 Plumbob: {{ human.plumbob.value }}</p>
 
                         <div class="mt-3">
                             <a href="{{ url_for('humans.update_human', human_id=human.id) }}" class="btn btn-primary">Edit</a>

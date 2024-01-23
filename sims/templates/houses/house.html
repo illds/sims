@@ -8,13 +8,13 @@
                         <h2 class="text-white">{{ house.type.value }}</h2>
                     </div>
                     <div class="card-body">
-                        <p class="lead">Room number: {{ house.room_number }}</p>
+                        <p class="lead"> Room number: {{ house.room_number }}</p>
                         <p class="lead">Floor number: {{ house.floor_number }}</p>
-                        <p class="lead">Coordinates: ({{ house.x_coordinate }}, {{ house.y_coordinate }})</p>
+                        <p class="lead">📍 Coordinates: ({{ house.x_coordinate }}, {{ house.y_coordinate }})</p>
                         {% if family %}
-                            <p class="lead">Resident Family: {{ family.name }}</p>
+                            <p class="lead">👨‍👨‍👧‍👧 Resident Family: {{ family.name }}</p>
                         {% else %}
-                            <p class="lead">Resident Family: No family lives</p>
+                            <p class="lead">👨‍👨‍👧‍👧 Resident Family: No family lives</p>
                         {% endif %}
 
                         <div class="mt-3">

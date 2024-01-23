@@ -8,13 +8,13 @@
                         <h2 class="text-white">Plate №: "{{ vehicle.plate }}"</h2>
                     </div>
                     <div class="card-body">
-                        <p class="lead">Type: {{ vehicle.type.value }}</p>
-                        <p class="lead">Color: {{ vehicle.color.value }}</p>
-                        <p class="lead">Coordinates: ({{ vehicle.x_coordinate }}, {{ vehicle.y_coordinate }})</p>
+                        <p class="lead">🚗 Type: {{ vehicle.type.value }}</p>
+                        <p class="lead">🌈 Color: {{ vehicle.color.value }}</p>
+                        <p class="lead">📍 Coordinates: ({{ vehicle.x_coordinate }}, {{ vehicle.y_coordinate }})</p>
                         {% if human %}
-                            <p class="lead">Owner: {{ human.name }}</p>
+                            <p class="lead">🚶‍♂️ Owner: {{ human.name }}</p>
                         {% else %}
-                            <p class="lead">Owner: No one</p>
+                            <p class="lead">🚶‍♂️ Owner: No one</p>
                         {% endif %}
 
                         <div class="mt-3">
