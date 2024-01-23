@@ -36,6 +36,12 @@ class Plumbob(Enum):
     RED = 'Red'
 
 
+class Gender(Enum):
+    MALE = 'Male'
+    FEMALE = 'Female'
+    ATTACK_HELICOPTER = 'Attack Helicopter'
+
+
 class Human(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -44,6 +50,7 @@ class Human(db.Model):
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)
     y_coordinate = db.Column(db.Integer, nullable=False, default=0)
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
+    gender = db.Column(db.Enum(Gender), nullable=False)
     plumbob = db.Column(db.Enum(Plumbob), default=Plumbob.GREEN)
 
     def __repr__(self):
@@ -62,7 +69,7 @@ class Pet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     type = db.Column(db.Enum(PetType), nullable=False)
-    breed = db.Column(db.String(100), nullable=False)
+    gender = db.Column(db.Enum(Gender), nullable=False)
     age = db.Column(db.Integer, nullable=False)
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)
     y_coordinate = db.Column(db.Integer, nullable=False, default=0)

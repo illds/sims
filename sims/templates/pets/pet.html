@@ -8,7 +8,8 @@
                         <h2 class="text-white">{{ pet.type.value }}: {{ pet.name }}</h2>
                     </div>
                     <div class="card-body">
-                        <p class="lead">Breed: {{ pet.breed }}</p>
+                        <p class="lead">Type: {{ pet.type.value }}</p>
+                        <p class="lead">Gender: {{ pet.gender.value }}</p>
                         <p class="lead">Age: {{ pet.age }}</p>
                         <p class="lead">Coordinates: ({{ pet.x_coordinate }}, {{ pet.y_coordinate }})</p>
                         {% if family %}
@@ -25,6 +26,9 @@
                             <button class="btn btn-danger" id="deleteBtn" data-toggle="modal"
                                     data-target="#deleteModal">Delete
                             </button>
+                            <form class="mt-3" action="{{ url_for('pets.pet_leave_family', pet_id=pet.id) }}" method="POST">
+                                <input class="btn btn-danger" type="submit" value="Leave the Family">
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -11,7 +11,7 @@ def home():
     for human in humans_query:
         humans.append({
             "id": human.id, "name": human.name,
-            "surname": human.surname, "age": human.age,
+            "surname": human.surname, "gender": human.gender, "age": human.age,
             "x": human.x_coordinate, "y": human.y_coordinate
         })
 
@@ -20,7 +20,7 @@ def home():
     for pet in pets_query:
         pets.append({
             "id": pet.id, "name": pet.name,
-            "type": pet.type, "breed": pet.breed, "age": pet.age,
+            "type": pet.type, "gender": pet.gender, "age": pet.age,
             "x": pet.x_coordinate, "y": pet.y_coordinate
         })
 

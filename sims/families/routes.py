@@ -56,6 +56,7 @@ def update_family(family_id):
 def delete_family(family_id):
     family = Family.query.get_or_404(family_id)
 
+    Pet.query.filter_by(family_id=family.id).update({Pet.family_id: None})
     Human.query.filter_by(family_id=family.id).update({Human.family_id: None})
 
     db.session.delete(family)

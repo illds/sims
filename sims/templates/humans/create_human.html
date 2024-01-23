@@ -32,6 +32,19 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
+                    {{ form.gender.label(class="form-control-label") }}
+                    {% if form.gender.errors %}
+                        {{ form.gender(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.gender.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.gender(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
                     {{ form.age.label(class="form-control-label") }}
                     {% if form.age.errors %}
                         {{ form.age(class="form-control form-control-lg is-invalid") }}

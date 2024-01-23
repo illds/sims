@@ -32,16 +32,16 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    {{ form.breed.label(class="form-control-label") }}
-                    {% if form.breed.errors %}
-                        {{ form.breed(class="form-control form-control-lg is-invalid") }}
+                    {{ form.gender.label(class="form-control-label") }}
+                    {% if form.gender.errors %}
+                        {{ form.gender(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.breed.errors %}
+                            {% for error in form.gender.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.breed(class="form-control form-control-lg") }}
+                        {{ form.gender(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
                 <div class="form-group">

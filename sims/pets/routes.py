@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.pets.forms import PetForm
-from sims.models import Pet, Family, PetType, Plumbob
+from sims.models import Pet, Family, PetType, Plumbob, Gender
 from flask_login import login_required
 
 pets = Blueprint('pets', __name__)
@@ -12,11 +12,12 @@ def new_pet():
     form = PetForm()
     if form.validate_on_submit():
         try:
+            gender = Gender(form.gender.data)
             pet_type = PetType(form.type.data)
         except KeyError:
-            flash('Invalid pet type', 'danger')
+            flash('Invalid pet or gender type', 'danger')
             return redirect(url_for('main.home'))
-        pet = Pet(name=form.name.data, type=pet_type, breed=form.breed.data, age=form.age.data,
+        pet = Pet(name=form.name.data, type=pet_type, gender=gender, age=form.age.data,
                       x_coordinate=form.x_coordinate.data, y_coordinate=form.y_coordinate.data)
         db.session.add(pet)
         db.session.commit()
@@ -41,13 +42,14 @@ def update_pet(pet_id):
     form = PetForm()
     if form.validate_on_submit():
         try:
+            gender = Gender(form.gender.data)
             pet_type = PetType(form.type.data)
         except KeyError:
-            flash('Invalid pet type', 'danger')
+            flash('Invalid pet or gender type', 'danger')
             return redirect(url_for('main.home'))
         pet.name = form.name.data
         pet.type = pet_type
-        pet.breed = form.breed.data
+        pet.gender = gender
         pet.age = form.age.data
         pet.x_coordinate = form.x_coordinate.data
         pet.y_coordinate = form.y_coordinate.data
@@ -57,7 +59,7 @@ def update_pet(pet_id):
     elif request.method == 'GET':
         form.name.data = pet.name
         form.type.data = pet.type
-        form.breed.data = pet.breed
+        form.gender.data = pet.gender
         form.age.data = pet.age
         form.x_coordinate.data = pet.x_coordinate
         form.y_coordinate.data = pet.y_coordinate
@@ -73,3 +75,14 @@ def delete_pet(pet_id):
     db.session.commit()
     flash('Pet has been deleted!', 'success')
     return redirect(url_for('main.home'))
+
+
+@pets.route("/pet/<int:pet_id>/leave_family", methods=['POST'])
+@login_required
+def pet_leave_family(pet_id):
+    pet = Pet.query.get_or_404(pet_id)
+    pet.family_id = None
+
+    db.session.commit()
+    flash(f'{pet.name} left the family!', 'success')
+    return redirect(url_for('pets.pet', pet_id=pet.id))
