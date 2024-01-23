@@ -14,3 +14,9 @@ class VehicleForm(FlaskForm):
     x_coordinate = IntegerField('X coordinate', validators=[DataRequired(), NumberRange(min=-450, max=450)])
     y_coordinate = IntegerField('Y coordinate', validators=[DataRequired(), NumberRange(min=-200, max=200)])
     submit = SubmitField('Done')
+
+
+class VehicleColorForm(FlaskForm):
+    color = SelectField('Color', choices=[(color.value, color.value) for color in Color],
+                        validators=[DataRequired()])
+    submit = SubmitField('Done')

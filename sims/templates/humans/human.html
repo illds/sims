@@ -24,6 +24,10 @@
                             <a href="{{ url_for('humans.update_human', human_id=human.id) }}" class="btn btn-primary">Edit</a>
                             <a href="{{ url_for('families.families_human', human_id=human.id) }}"
                                class="btn btn-primary">Join a Family</a>
+                            <a href="{{ url_for('humans.change_job', human_id=human.id) }}"
+                               class="btn btn-primary">Change Job</a>
+                            <a href="{{ url_for('humans.change_coordinates', human_id=human.id) }}"
+                               class="btn btn-primary">Change Coordinates</a>
                             <button class="btn btn-danger" id="deleteBtn" data-toggle="modal"
                                     data-target="#deleteModal">Delete
                             </button>

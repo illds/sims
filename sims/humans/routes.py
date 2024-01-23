@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
-from sims.humans.forms import HumanForm
+from sims.humans.forms import HumanForm, HumanJobForm, HumanCoordinatesForm
 from sims.models import Human, Family, Gender, Job
 from flask_login import login_required
 
@@ -100,3 +100,41 @@ def humans_vehicle(vehicle_id):
     humans = Human.query.all()
     return render_template('humans/humans_vehicle.html', title='List of Humans',
                            humans=humans, vehicle_id=vehicle_id)
+
+
+@humans.route("/human/<int:human_id>/change_job", methods=['GET', 'POST'])
+def change_job(human_id):
+    human = Human.query.get_or_404(human_id)
+
+    form = HumanJobForm()
+    if form.validate_on_submit():
+        try:
+            job = Job(form.job.data)
+        except KeyError:
+            flash('Invalid job type', 'danger')
+            return redirect(url_for('main.home'))
+        human.job = job
+        db.session.commit()
+        flash('Job has been changed!', 'success')
+        return redirect(url_for('humans.human', human_id=human.id))
+    elif request.method == 'GET':
+        form.job.data = human.job
+    return render_template('humans/change_job.html', form=form, legend='Change Job', title='Update Job')
+
+
+@humans.route("/human/<int:human_id>/change_coordinates", methods=['GET', 'POST'])
+def change_coordinates(human_id):
+    human = Human.query.get_or_404(human_id)
+
+    form = HumanCoordinatesForm()
+    if form.validate_on_submit():
+        human.x_coordinate = form.x_coordinate.data
+        human.y_coordinate = form.y_coordinate.data
+        db.session.commit()
+        flash('Job has been changed!', 'success')
+        return redirect(url_for('humans.human', human_id=human.id))
+    elif request.method == 'GET':
+        form.x_coordinate.data = human.x_coordinate
+        form.y_coordinate.data = human.y_coordinate
+    return render_template('humans/change_coordinates.html', form=form, legend='Change Coordinates',
+                           title='Update Coordinates')

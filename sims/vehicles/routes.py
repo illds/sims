@@ -4,10 +4,11 @@ from sims.houses.forms import HouseForm
 from sims.models import House, HouseType, Family, VehicleType, Color, Vehicle, Human
 from flask_login import login_required
 
-from sims.vehicles.forms import VehicleForm
+from sims.vehicles.forms import VehicleForm, VehicleColorForm
 
 vehicles = Blueprint('vehicles', __name__)
 
+ADULT_AGE = 18
 
 @vehicles.route("/vehicle/new", methods=['GET', 'POST'])
 @login_required
@@ -78,15 +79,20 @@ def delete_vehicle(vehicle_id):
     return redirect(url_for('main.home'))
 
 
+def is_adult(human):
+    return not human.age < ADULT_AGE
+
+
 @vehicles.route("/vehicle/<int:vehicle_id>/add_human/<int:human_id>", methods=['POST', 'GET'])
 @login_required
 def vehicle_add_human(vehicle_id, human_id):
     vehicle = Vehicle.query.get_or_404(vehicle_id)
     human = Human.query.get_or_404(human_id)
 
-    if human.age < 18:
+    if not is_adult(human):
         flash(f'{human.name} is not adult!', 'danger')
         return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))
+
     vehicle.human_id = human.id
     db.session.commit()
     flash('Human has been added!', 'success')
@@ -102,3 +108,23 @@ def vehicle_delete_human(vehicle_id):
     db.session.commit()
     flash('Human has been deleted!', 'success')
     return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))
+
+
+@vehicles.route("/vehicle/<int:vehicle_id>/change_color", methods=['GET', 'POST'])
+def change_color(vehicle_id):
+    vehicle = Vehicle.query.get_or_404(vehicle_id)
+
+    form = VehicleColorForm()
+    if form.validate_on_submit():
+        try:
+            color = Color(form.color.data)
+        except KeyError:
+            flash('Invalid color type', 'danger')
+            return redirect(url_for('main.home'))
+        vehicle.color = color
+        db.session.commit()
+        flash('Color has been changed!', 'success')
+        return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))
+    elif request.method == 'GET':
+        form.color.data = vehicle.color
+    return render_template('vehicles/change_color.html', form=form, legend='Change Color', title='Update Color')

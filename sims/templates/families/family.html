@@ -15,6 +15,7 @@
                         {% for pet in pets_in_family %}
                             <p class="lead">Member of family: {{ pet.type.value }} {{ pet.name }}</p>
                         {% endfor %}
+                        <p class="lead">Total salary of all members: {{ total_money }}</p>
                         <div class="mt-3">
                             <a href="{{ url_for('families.update_family', family_id=family.id) }}"
                                class="btn btn-primary">Edit</a>

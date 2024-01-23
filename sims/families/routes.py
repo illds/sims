@@ -25,13 +25,32 @@ def new_family():
                            form=form, legend='New Family')
 
 
+def get_humans_in_family(family):
+    # Получить всех членов семьи (людей)
+    return Human.query.filter_by(family_id=family.id).all()
+
+
+def get_pets_in_family(family):
+    # Получить всех членов семьи (питомцев)
+    return Pet.query.filter_by(family_id=family.id).all()
+
+
+def get_family_money(family):
+    # Получить зар. плату всех членов семьи
+    humans_in_family = get_humans_in_family(family)
+    total = 0
+    for human in humans_in_family:
+        total += human.salary
+    return total
+
 @families.route("/family/<int:family_id>")
 def family(family_id):
     family = Family.query.get_or_404(family_id)
-    humans_in_family = Human.query.filter_by(family_id=family.id).all()
-    pets_in_family = Pet.query.filter_by(family_id=family.id).all()
+    humans_in_family = get_humans_in_family(family)
+    pets_in_family = get_pets_in_family(family)
     return render_template('families/family.html', family=family,
-                           humans_in_family=humans_in_family, pets_in_family=pets_in_family)
+                           humans_in_family=humans_in_family, pets_in_family=pets_in_family,
+                           total_money=get_family_money(family))
 
 
 @families.route("/family/<int:family_id>/update", methods=['GET', 'POST'])
@@ -104,7 +123,7 @@ def human_join_family(family_id, human_id):
     family = Family.query.get_or_404(family_id)
 
     if human.surname != family.name:
-        flash(f'{human.name} doesn\'t have {family.name} surname!', 'danger')
+        flash(f'{human.name} doesn\'t have {family.name} surname.', 'danger')
         return redirect(url_for('humans.human', human_id=human.id))
 
 
@@ -126,3 +145,5 @@ def pet_join_family(family_id, pet_id):
 
     flash(f'{pet.name} has joined {family.name} family!', 'success')
     return redirect(url_for('pets.pet', pet_id=pet.id))
+
+
