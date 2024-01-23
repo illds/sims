@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from sims.models import Human, House, Pet
+from sims.models import Human, House, Pet, Vehicle
 
 main = Blueprint('main', __name__)
 
@@ -33,7 +33,16 @@ def home():
             "x": house.x_coordinate, "y": house.y_coordinate
         })
 
-    return render_template('home.html', humans=humans, houses=houses, pets=pets)
+    vehicles_query = Vehicle.query.all()
+    vehicles = []
+    for vehicle in vehicles_query:
+        vehicles.append({
+            "id": vehicle.id, "plate": vehicle.plate,
+            "type": vehicle.type, "color": vehicle.color,
+            "x": vehicle.x_coordinate, "y": vehicle.y_coordinate
+        })
+
+    return render_template('home.html', humans=humans, houses=houses, pets=pets, vehicles=vehicles)
 
 
 @main.route("/about")

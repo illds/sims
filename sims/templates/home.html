@@ -100,12 +100,46 @@
                     window.location.href = url;
                 });
         {% endfor %}
+
+        {% for vehicle in vehicles %}
+            {% if vehicle.type.value == "Car" %}
+                const vehicle_emoji_{{ vehicle.id }} = "🚗"
+            {% elif vehicle.type.value == "Truck" %}
+                const vehicle_emoji_{{ vehicle.id }} = "🚛"
+            {% elif vehicle.type.value == "Motorcycle" %}
+                const vehicle_emoji_{{ vehicle.id }} = "🏍️"
+            {% else %}
+                const vehicle_emoji_{{ vehicle.id }} = "🚌"
+            {% endif %}
+            svg.append("text")
+                .attr("x", width / 2 + {{ vehicle.x }})
+                .attr("y", height / 2 - {{ vehicle.y }})
+                .text(vehicle_emoji_{{ vehicle.id }})
+                .attr("fill", "black")
+                .style("font-size", "20px")
+                .on("click", function () {
+                    const url = "{{ url_for('vehicles.vehicle', vehicle_id=vehicle.id) }}";
+                    window.location.href = url;
+                });
+
+            svg.append("text")
+                .attr("x", width / 2 + {{ vehicle.x }} - 5)
+                .attr("y", height / 2 - {{ vehicle.y }} - 20)
+                .text("{{ vehicle.plate }}")
+                .attr("fill", "black")
+                .style("font-size", "10px")
+                .on("click", function () {
+                    const url = "{{ url_for('vehicles.vehicle', vehicle_id=vehicle.id) }}";
+                    window.location.href = url;
+                });
+        {% endfor %}
     </script>
     <div class="mt-3 text-center">
         <a href="{{ url_for('humans.new_human') }}" class="btn btn-success mb-2">New Human</a>
         <a href="{{ url_for('pets.new_pet') }}" class="btn btn-success mb-2">New Pet</a>
         <a href="{{ url_for('houses.new_house') }}" class="btn btn-success mb-2">New House</a>
         <a href="{{ url_for('families.new_family') }}" class="btn btn-success mb-2">New Family</a>
+        <a href="{{ url_for('vehicles.new_vehicle') }}" class="btn btn-success mb-2">New Vehicle</a>
         <br>
         <a href="{{ url_for('families.all_families') }}" class="btn btn-info mb-2">All Families</a>
     </div>

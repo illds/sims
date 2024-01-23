@@ -114,3 +114,30 @@ class Family(db.Model):
 
     def __repr__(self):
         return f"Family(id={self.id}, name={self.name}, humans='{self.humans}', pets='{self.pets}')"
+
+
+class VehicleType(Enum):
+    CAR = 'Car'
+    TRUCK = 'Truck'
+    MOTORCYCLE = 'Motorcycle'
+    BUS = 'Bus'
+
+
+class Color(Enum):
+    RED = 'Red'
+    GREEN = 'Green'
+    BLUE = 'Blue'
+    YELLOW = 'Yellow'
+
+
+class Vehicle(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    plate = db.Column(db.String(30), nullable=False)
+    type = db.Column(db.Enum(VehicleType), nullable=False)
+    color = db.Column(db.Enum(Color), nullable=False)
+    x_coordinate = db.Column(db.Integer, nullable=False, default=0)
+    y_coordinate = db.Column(db.Integer, nullable=False, default=0)
+    human_id = db.Column(db.Integer, db.ForeignKey('human.id'))
+
+    def __repr__(self):
+        return f"Car('{self.id}', human_id={self.human_id}, x={self.x_coordinate}, y={self.y_coordinate})"
