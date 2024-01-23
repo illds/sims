@@ -84,6 +84,9 @@ def vehicle_add_human(vehicle_id, human_id):
     vehicle = Vehicle.query.get_or_404(vehicle_id)
     human = Human.query.get_or_404(human_id)
 
+    if human.age < 18:
+        flash(f'{human.name} is not adult!', 'danger')
+        return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))
     vehicle.human_id = human.id
     db.session.commit()
     flash('Human has been added!', 'success')

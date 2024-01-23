@@ -103,6 +103,11 @@ def human_join_family(family_id, human_id):
     human = Human.query.get_or_404(human_id)
     family = Family.query.get_or_404(family_id)
 
+    if human.surname != family.name:
+        flash(f'{human.name} doesn\'t have {family.name} surname!', 'danger')
+        return redirect(url_for('humans.human', human_id=human.id))
+
+
     human.family_id = family_id
     db.session.commit()
 

@@ -71,6 +71,19 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
+                    {{ form.salary.label(class="form-control-label") }}
+                    {% if form.salary.errors %}
+                        {{ form.salary(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.salary.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.salary(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
                     {{ form.x_coordinate.label(class="form-control-label") }}
                     {% if form.x_coordinate.errors %}
                         {{ form.x_coordinate(class="form-control form-control-lg is-invalid") }}

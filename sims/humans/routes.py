@@ -53,6 +53,7 @@ def update_human(human_id):
         human.surname = form.surname.data
         human.gender = gender
         human.job = job
+        human.salary = form.salary.data
         human.age = form.age.data
         human.x_coordinate = form.x_coordinate.data
         human.y_coordinate = form.y_coordinate.data
@@ -64,6 +65,7 @@ def update_human(human_id):
         form.surname.data = human.surname
         form.gender.data = human.gender
         form.job.data = human.job
+        form.salary.data = human.salary
         form.age.data = human.age
         form.x_coordinate.data = human.x_coordinate
         form.y_coordinate.data = human.y_coordinate
