@@ -1,11 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField
+from wtforms import SubmitField, IntegerField, SelectField
 from wtforms.validators import DataRequired
+
+from sims.models import HouseType
 
 
 class HouseForm(FlaskForm):
-    # owner_family = StringField("Family's surname", validators=[DataRequired()])
-    type = StringField("Type", validators=[DataRequired()])
+    type = SelectField('Type', choices=[(house_type.value, house_type.value) for house_type in HouseType],
+                       validators=[DataRequired()])
     room_number = IntegerField('Room number', validators=[DataRequired()])
     floor_number = IntegerField('Floor number', validators=[DataRequired()])
     x_coordinate = IntegerField('X coordinate', validators=[DataRequired()])

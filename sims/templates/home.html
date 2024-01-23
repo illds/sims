@@ -3,7 +3,6 @@
     <h1 class="text-center border-bottom">Sims Map</h1>
     <div id="plot-container" class="border border-dark"></div>
     <script>
-        // Создаем координатную плоскость с помощью D3.js
         const width = 1000;
         const height = 500;
 
@@ -12,7 +11,6 @@
             .attr("width", width)
             .attr("height", height);
 
-        // Добавляем точки и имена людей (humans) на плоскость с использованием цикла for
         {% for human in humans %}
             {% if human.gender.value == "Male" %}
                 const human_emoji_{{ human.id }} = "🧍‍♂️"

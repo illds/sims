@@ -42,15 +42,24 @@ class Gender(Enum):
     ATTACK_HELICOPTER = 'Attack Helicopter'
 
 
+class Job(Enum):
+    UNEMPLOYED = 'Unemployed'
+    DOCTOR = 'Doctor'
+    POLICEMAN = 'Policeman'
+    FIREFIGHTER = 'Firefighter'
+    MINER = 'Miner'
+
+
 class Human(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     surname = db.Column(db.String(100), nullable=False)
+    gender = db.Column(db.Enum(Gender), nullable=False)
     age = db.Column(db.Integer, nullable=False)
+    job = db.Column(db.Enum(Job), default=Job.UNEMPLOYED)
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)
     y_coordinate = db.Column(db.Integer, nullable=False, default=0)
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
-    gender = db.Column(db.Enum(Gender), nullable=False)
     plumbob = db.Column(db.Enum(Plumbob), default=Plumbob.GREEN)
 
     def __repr__(self):
@@ -80,9 +89,15 @@ class Pet(db.Model):
         return f"Human('{self.name}', '{self.id}', x={self.x_coordinate}, y={self.y_coordinate})"
 
 
+class HouseType(Enum):
+    APARTMENT = 'Apartment'
+    SINGLE_FAMILY = 'Single-family'
+    CONDO = 'Condo'
+
+
 class House(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String(100), nullable=False)
+    type = db.Column(db.Enum(HouseType), nullable=False)
     room_number = db.Column(db.Integer, nullable=False, default=1)
     floor_number = db.Column(db.Integer, nullable=False, default=1)
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)

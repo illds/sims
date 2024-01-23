@@ -26,9 +26,12 @@
                             <button class="btn btn-danger" id="deleteBtn" data-toggle="modal"
                                     data-target="#deleteModal">Delete
                             </button>
-                            <form class="mt-3" action="{{ url_for('pets.pet_leave_family', pet_id=pet.id) }}" method="POST">
-                                <input class="btn btn-danger" type="submit" value="Leave the Family">
-                            </form>
+                            {% if family %}
+                                <form class="mt-3" action="{{ url_for('pets.pet_leave_family', pet_id=pet.id) }}"
+                                      method="POST">
+                                    <input class="btn btn-danger" type="submit" value="Leave the Family">
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

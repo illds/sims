@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.humans.forms import HumanForm
-from sims.models import Human, Family, Gender
+from sims.models import Human, Family, Gender, Job
 from flask_login import login_required
 
 humans = Blueprint('humans', __name__)
@@ -13,12 +13,13 @@ def new_human():
     form = HumanForm()
     if form.validate_on_submit():
         try:
+            job = Job(form.job.data)
             gender = Gender(form.gender.data)
         except KeyError:
-            flash('Invalid gender type', 'danger')
+            flash('Invalid gender or job type', 'danger')
             return redirect(url_for('main.home'))
         human = Human(name=form.name.data, surname=form.surname.data,
-                      gender=gender, age=form.age.data,
+                      gender=gender, age=form.age.data, job=job,
                       x_coordinate=form.x_coordinate.data, y_coordinate=form.y_coordinate.data)
         db.session.add(human)
         db.session.commit()
@@ -43,13 +44,15 @@ def update_human(human_id):
     form = HumanForm()
     if form.validate_on_submit():
         try:
+            job = Job(form.job.data)
             gender = Gender(form.gender.data)
         except KeyError:
-            flash('Invalid gender type', 'danger')
+            flash('Invalid gender or job type', 'danger')
             return redirect(url_for('main.home'))
         human.name = form.name.data
         human.surname = form.surname.data
         human.gender = gender
+        human.job = job
         human.age = form.age.data
         human.x_coordinate = form.x_coordinate.data
         human.y_coordinate = form.y_coordinate.data
@@ -60,6 +63,7 @@ def update_human(human_id):
         form.name.data = human.name
         form.surname.data = human.surname
         form.gender.data = human.gender
+        form.job.data = human.job
         form.age.data = human.age
         form.x_coordinate.data = human.x_coordinate
         form.y_coordinate.data = human.y_coordinate

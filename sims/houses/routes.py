@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.houses.forms import HouseForm
-from sims.models import House
+from sims.models import House, HouseType
 from flask_login import login_required
 
 houses = Blueprint('houses', __name__)
@@ -12,7 +12,12 @@ houses = Blueprint('houses', __name__)
 def new_house():
     form = HouseForm()
     if form.validate_on_submit():
-        house = House(type=form.type.data,
+        try:
+            house_type = HouseType(form.type.data)
+        except KeyError:
+            flash('Invalid house type', 'danger')
+            return redirect(url_for('main.home'))
+        house = House(type=house_type,
                       room_number=form.room_number.data, floor_number=form.floor_number.data,
                       x_coordinate=form.x_coordinate.data, y_coordinate=form.y_coordinate.data)
         db.session.add(house)
@@ -37,7 +42,12 @@ def update_house(house_id):
     # abort(403)
     form = HouseForm()
     if form.validate_on_submit():
-        house.type = form.type.data
+        try:
+            house_type = HouseType(form.type.data)
+        except KeyError:
+            flash('Invalid house type', 'danger')
+            return redirect(url_for('main.home'))
+        house.type = house_type
         house.room_number = form.room_number.data
         house.floor_number = form.floor_number.data
         house.x_coordinate = form.x_coordinate.data
@@ -58,9 +68,6 @@ def update_house(house_id):
 @login_required
 def delete_house(house_id):
     house = House.query.get_or_404(house_id)
-
-    # if house.author != current_user:
-    #     abort(403)
 
     db.session.delete(house)
     db.session.commit()
