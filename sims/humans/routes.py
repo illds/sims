@@ -90,3 +90,11 @@ def human_leave_family(human_id):
     db.session.commit()
     flash(f'{human.name} left the family!', 'success')
     return redirect(url_for('humans.human', human_id=human.id))
+
+
+@humans.route("/humans/vehicle/<int:vehicle_id>", methods=['GET', 'POST'])
+@login_required
+def humans_vehicle(vehicle_id):
+    humans = Human.query.all()
+    return render_template('humans/humans_vehicle.html', title='List of Humans',
+                           humans=humans, vehicle_id=vehicle_id)

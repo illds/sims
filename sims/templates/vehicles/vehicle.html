@@ -11,12 +11,26 @@
                         <p class="lead">Type: {{ vehicle.type.value }}</p>
                         <p class="lead">Color: {{ vehicle.color.value }}</p>
                         <p class="lead">Coordinates: ({{ vehicle.x_coordinate }}, {{ vehicle.y_coordinate }})</p>
+                        {% if human %}
+                            <p class="lead">Owner: {{ human.name }}</p>
+                        {% else %}
+                            <p class="lead">Owner: No one</p>
+                        {% endif %}
 
                         <div class="mt-3">
                             <a href="{{ url_for('vehicles.update_vehicle', vehicle_id=vehicle.id) }}" class="btn btn-primary">Edit</a>
+                            <a href="{{ url_for('humans.humans_vehicle', vehicle_id=vehicle.id) }}"
+                               class="btn btn-primary">Add owner</a>
                             <button class="btn btn-danger" id="deleteBtn" data-toggle="modal"
                                     data-target="#deleteModal">Delete
                             </button>
+                            {% if human %}
+                                <form class="mt-3"
+                                      action="{{ url_for('vehicles.vehicle_delete_human', vehicle_id=vehicle.id) }}"
+                                      method="POST">
+                                    <input class="btn btn-primary" type="submit" value="Delete owner">
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

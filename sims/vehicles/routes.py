@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.houses.forms import HouseForm
-from sims.models import House, HouseType, Family, VehicleType, Color, Vehicle
+from sims.models import House, HouseType, Family, VehicleType, Color, Vehicle, Human
 from flask_login import login_required
 
 from sims.vehicles.forms import VehicleForm
@@ -33,7 +33,8 @@ def new_vehicle():
 @vehicles.route("/vehicle/<int:vehicle_id>")
 def vehicle(vehicle_id):
     vehicle = Vehicle.query.get_or_404(vehicle_id)
-    return render_template('vehicles/vehicle.html', vehicle=vehicle)
+    human = Human.query.get(vehicle.human_id)
+    return render_template('vehicles/vehicle.html', vehicle=vehicle, human=human)
 
 
 @vehicles.route("/vehicle/<int:vehicle_id>/update", methods=['GET', 'POST'])
@@ -77,24 +78,24 @@ def delete_vehicle(vehicle_id):
     return redirect(url_for('main.home'))
 
 
-# @vehicles.route("/house/<int:house_id>/add_family/<int:family_id>", methods=['POST', 'GET'])
-# @login_required
-# def house_add_family(house_id, family_id):
-#     house = House.query.get_or_404(house_id)
-#     family = Family.query.get_or_404(family_id)
-#
-#     house.family_id = family.id
-#     db.session.commit()
-#     flash('Family has been added!', 'success')
-#     return redirect(url_for('vehicles.house', house_id=house.id))
-#
-#
-# @vehicles.route("/house/<int:house_id>/leave_family", methods=['POST'])
-# @login_required
-# def house_leave_family(house_id):
-#     house = House.query.get_or_404(house_id)
-#     house.family_id = None
-#
-#     db.session.commit()
-#     flash('Family has been deleted!', 'success')
-#     return redirect(url_for('vehicles.house', house_id=house.id))
+@vehicles.route("/vehicle/<int:vehicle_id>/add_human/<int:human_id>", methods=['POST', 'GET'])
+@login_required
+def vehicle_add_human(vehicle_id, human_id):
+    vehicle = Vehicle.query.get_or_404(vehicle_id)
+    human = Human.query.get_or_404(human_id)
+
+    vehicle.human_id = human.id
+    db.session.commit()
+    flash('Human has been added!', 'success')
+    return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))
+
+
+@vehicles.route("/vehicle/<int:vehicle_id>/leave_human", methods=['POST'])
+@login_required
+def vehicle_delete_human(vehicle_id):
+    vehicle = Vehicle.query.get_or_404(vehicle_id)
+    vehicle.human_id = None
+
+    db.session.commit()
+    flash('Human has been deleted!', 'success')
+    return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))

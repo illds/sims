@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <h1>List of Humans</h1>
+        <ul class="list-group">
+            {% for human in humans %}
+                <li class="list-group-item d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="mb-0">{{ human.name }}</h3>
+                    <a href="{{ url_for('vehicles.vehicle_add_human', vehicle_id=vehicle_id, human_id=human.id) }}" class="btn btn-outline-info">Make owner</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}
