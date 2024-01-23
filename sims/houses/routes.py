@@ -84,16 +84,16 @@ def house_add_family(house_id, family_id):
 
     house.family_id = family.id
     db.session.commit()
-    flash('House has been deleted!', 'success')
-    return redirect(url_for('main.home'))
+    flash('Family has been added!', 'success')
+    return redirect(url_for('houses.house', house_id=house.id))
 
 
-@houses.route("/house/<int:house_id>/delete", methods=['POST'])
+@houses.route("/house/<int:house_id>/leave_family", methods=['POST'])
 @login_required
 def house_leave_family(house_id):
     house = House.query.get_or_404(house_id)
     house.family_id = None
 
     db.session.commit()
-    flash('House\'s family has been deleted!', 'success')
-    return redirect(url_for('houses.house'), house_id=house.id)
+    flash('Family has been deleted!', 'success')
+    return redirect(url_for('houses.house', house_id=house.id))
