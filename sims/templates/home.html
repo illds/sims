@@ -14,12 +14,19 @@
 
         // Добавляем точки и имена людей (humans) на плоскость с использованием цикла for
         {% for human in humans %}
-            const human{{ human.id }} = svg.append("circle")
-                .attr("cx", width / 2 + {{ human.x }})
-                .attr("cy", height / 2 - {{ human.y }})
-                .attr("r", 8)
-                .attr("fill", "green")
-                .attr("class", "human-point")
+            {% if human.gender.value == "Male" %}
+                const human_emoji_{{ human.id }} = "🧍‍♂️"
+            {% elif human.gender.value == "Female" %}
+                const human_emoji_{{ human.id }} = "🧍‍♀️"
+            {% else %}
+                const human_emoji_{{ human.id }} = "🚁"
+            {% endif %}
+            svg.append("text")
+                .attr("x", width / 2 + {{ human.x }})
+                .attr("y", height / 2 - {{ human.y }})
+                .text(human_emoji_{{ human.id }})
+                .attr("fill", "black")
+                .style("font-size", "20px")
                 .on("click", function () {
                     const url = "{{ url_for('humans.human', human_id=human.id) }}";
                     window.location.href = url;
@@ -27,7 +34,7 @@
 
             svg.append("text")
                 .attr("x", width / 2 + {{ human.x }})
-                .attr("y", height / 2 - {{ human.y }})
+                .attr("y", height / 2 - {{ human.y }} - 20)
                 .text("{{ human.name }}")
                 .attr("fill", "black")
                 .style("font-size", "10px")
@@ -38,20 +45,31 @@
         {% endfor %}
 
         {% for pet in pets %}
-            const pet{{ pet.id }} = svg.append("circle")
-                .attr("cx", width / 2 + {{ pet.x }})
-                .attr("cy", height / 2 - {{ pet.y }})
-                .attr("r", 5)
-                .attr("fill", "red")
-                .attr("class", "pet-point")
+            {% if pet.type.value == "Cat" %}
+                const pet_emoji_{{ pet.id }} = "🐈"
+            {% elif pet.type.value == "Dog" %}
+                const pet_emoji_{{ pet.id }} = "🐕"
+            {% elif pet.type.value == "Hamster" %}
+                const pet_emoji_{{ pet.id }} = "🐹"
+            {% elif pet.type.value == "Fish" %}
+                const pet_emoji_{{ pet.id }} = "🐟"
+            {% else %}
+                const pet_emoji_{{ pet.id }} = "🦜"
+            {% endif %}
+            svg.append("text")
+                .attr("x", width / 2 + {{ pet.x }})
+                .attr("y", height / 2 - {{ pet.y }})
+                .text(pet_emoji_{{ pet.id }})
+                .attr("fill", "black")
+                .style("font-size", "20px")
                 .on("click", function () {
                     const url = "{{ url_for('pets.pet', pet_id=pet.id) }}";
                     window.location.href = url;
                 });
 
             svg.append("text")
-                .attr("x", width / 2 + {{ pet.x }})
-                .attr("y", height / 2 - {{ pet.y }})
+                .attr("x", width / 2 + {{ pet.x }} + 3)
+                .attr("y", height / 2 - {{ pet.y }} - 20)
                 .text("{{ pet.name }}")
                 .attr("fill", "black")
                 .style("font-size", "10px")
@@ -62,18 +80,6 @@
         {% endfor %}
 
         {% for house in houses %}
-            {#const house{{ house.id }} = svg.append("rect")#}
-            {#    .attr("x", width / 2 + {{ house.x }})#}
-            {#    .attr("y", height / 2 - {{ house.y }})#}
-            {#    .attr("width", 30)#}
-            {#    .attr("height", 30)#}
-            {#    .attr("fill", "grey")#}
-            {#    .attr("class", "house-point")#}
-            {#    .on("click", function () {#}
-            {#        const url = "{{ url_for('houses.house', house_id=house.id) }}";#}
-            {#        window.location.href = url;#}
-            {#    });#}
-
             svg.append("text")
                 .attr("x", width / 2 + {{ house.x }})
                 .attr("y", height / 2 - {{ house.y }})

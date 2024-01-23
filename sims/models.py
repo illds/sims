@@ -60,7 +60,7 @@ class Human(db.Model):
 class PetType(Enum):
     CAT = 'Cat'
     DOG = 'Dog'
-    BIRD = 'Bird'
+    HAMSTER = 'Hamster'
     FISH = 'Fish'
     PARROT = 'Parrot'
 
