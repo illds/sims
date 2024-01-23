@@ -62,21 +62,32 @@
         {% endfor %}
 
         {% for house in houses %}
-            const house{{ house.id }} = svg.append("rect")
+            {#const house{{ house.id }} = svg.append("rect")#}
+            {#    .attr("x", width / 2 + {{ house.x }})#}
+            {#    .attr("y", height / 2 - {{ house.y }})#}
+            {#    .attr("width", 30)#}
+            {#    .attr("height", 30)#}
+            {#    .attr("fill", "grey")#}
+            {#    .attr("class", "house-point")#}
+            {#    .on("click", function () {#}
+            {#        const url = "{{ url_for('houses.house', house_id=house.id) }}";#}
+            {#        window.location.href = url;#}
+            {#    });#}
+
+            svg.append("text")
                 .attr("x", width / 2 + {{ house.x }})
                 .attr("y", height / 2 - {{ house.y }})
-                .attr("width", 30)
-                .attr("height", 30)
-                .attr("fill", "grey")
-                .attr("class", "house-point")
+                .text("🏠︎")
+                .attr("fill", "black")
+                .style("font-size", "20px")
                 .on("click", function () {
                     const url = "{{ url_for('houses.house', house_id=house.id) }}";
                     window.location.href = url;
                 });
 
             svg.append("text")
-                .attr("x", width / 2 + {{ house.x }} -5)
-                .attr("y", height / 2 - {{ house.y }})
+                .attr("x", width / 2 + {{ house.x }} - 5)
+                .attr("y", height / 2 - {{ house.y }} - 20)
                 .text("House")
                 .attr("fill", "black")
                 .style("font-size", "10px")
