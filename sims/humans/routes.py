@@ -1,6 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.humans.forms import HumanForm, HumanJobForm, HumanCoordinatesForm
+from sims.humans.procedures import update_human_location
 from sims.models import Human, Family, Gender, Job
 from flask_login import login_required
 
@@ -128,8 +129,7 @@ def change_coordinates(human_id):
 
     form = HumanCoordinatesForm()
     if form.validate_on_submit():
-        human.x_coordinate = form.x_coordinate.data
-        human.y_coordinate = form.y_coordinate.data
+        update_human_location(human.id, form.x_coordinate.data, form.y_coordinate.data)
         db.session.commit()
         flash('Job has been changed!', 'success')
         return redirect(url_for('humans.human', human_id=human.id))
