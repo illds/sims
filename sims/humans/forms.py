@@ -13,7 +13,7 @@ class HumanForm(FlaskForm):
     gender = SelectField('Gender', choices=[(gender.value, gender.value) for gender in Gender],
                          validators=[DataRequired()])
     age = IntegerField('Age', validators=[InputRequired(), NumberRange(min=0, max=100)])
-    salary = IntegerField('Salary', validators=[InputRequired(), NumberRange(min=0, max=1000000)])
+    # salary = IntegerField('Salary', validators=[InputRequired(), NumberRange(min=0, max=1000000)])
     job = SelectField('Job', coerce=int)
     # job = SelectField('Job', choices=[(job.value, job.value) for job in Job],
     #                   validators=[DataRequired()])

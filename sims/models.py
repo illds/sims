@@ -62,7 +62,7 @@ class Human(db.Model):
     gender = db.Column(db.Enum(Gender), nullable=False)
     age = db.Column(db.Integer, nullable=False)
     # job = db.Column(db.Enum(Job), default=Job.UNEMPLOYED)
-    salary = db.Column(db.Integer, default=0)
+    # salary = db.Column(db.Integer, default=0)
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)
     y_coordinate = db.Column(db.Integer, nullable=False, default=0)
     job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'))

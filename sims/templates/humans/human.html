@@ -10,8 +10,12 @@
                     <div class="card-body">
                         <p class="lead">🚻 Gender: {{ human.gender.value }}</p>
                         <p class="lead">🕛 Age: {{ human.age }}</p>
-                        <p class="lead">💼 Job: {{ human.job.value }}</p>
-                        <p class="lead">💸 Salary: {{ human.salary }}</p>
+                        {% if job %}
+                            <p class="lead">💼 Job: {{ job.name }}</p>
+                            <p class="lead">💰 Salary: {{ job.salary }}</p>
+                        {% else %}
+                            <p class="lead">💼 Job: Unemployed</p>
+                        {% endif %}
                         <p class="lead">📍 Coordinates: ({{ human.x_coordinate }}, {{ human.y_coordinate }})</p>
                         {% if family %}
                             <p class="lead">👨‍👨‍👧 Family: {{ family.name }}</p>

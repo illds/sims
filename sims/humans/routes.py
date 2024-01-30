@@ -32,7 +32,7 @@ def new_human():
         db.session.commit()
         flash('Human has been created!', 'success')
         return redirect(url_for('main.home'))
-    return render_template('humans/create_human.html', title='New human',
+    return render_template('humans/create_human.html', title='New Human',
                            form=form, legend='New Human')
 
 
@@ -40,7 +40,8 @@ def new_human():
 def human(human_id):
     human = Human.query.get_or_404(human_id)
     family = Family.query.get(human.family_id)
-    return render_template('humans/human.html', human=human, family=family)
+    job = Jobs.query.get(human.job_id)
+    return render_template('humans/human.html', human=human, family=family, job=job)
 
 
 @humans.route("/human/<int:human_id>/update", methods=['GET', 'POST'])
@@ -49,21 +50,25 @@ def update_human(human_id):
     human = Human.query.get_or_404(human_id)
 
     form = HumanForm()
+
+    # Think of something smarter
+    form.job.choices = [(job.id, job.name) for job in Jobs.query.all()]
+    form.x_coordinate.data = human.x_coordinate
+    form.y_coordinate.data = human.y_coordinate
+
     if form.validate_on_submit():
         try:
-            job = Job(form.job.data)
             gender = Gender(form.gender.data)
-        except KeyError:
-            flash('Invalid gender or job type', 'danger')
+        except (KeyError, ValueError):
+            flash('Invalid gender type', 'danger')
             return redirect(url_for('main.home'))
+
         human.name = form.name.data
         human.surname = form.surname.data
         human.gender = gender
-        human.job = job
-        human.salary = form.salary.data
+        human.job_id = form.job.data
         human.age = form.age.data
-        human.x_coordinate = form.x_coordinate.data
-        human.y_coordinate = form.y_coordinate.data
+
         db.session.commit()
         flash('Your human has been updated!', 'success')
         return redirect(url_for('humans.human', human_id=human.id))
@@ -71,12 +76,10 @@ def update_human(human_id):
         form.name.data = human.name
         form.surname.data = human.surname
         form.gender.data = human.gender
-        form.job.data = human.job
-        form.salary.data = human.salary
         form.age.data = human.age
-        form.x_coordinate.data = human.x_coordinate
-        form.y_coordinate.data = human.y_coordinate
-    return render_template('humans/create_human.html', form=form, legend='Update Human', title='Update Human', target='EDIT')
+
+    return render_template('humans/create_human.html', form=form, legend='Update Human',
+                           title='Update Human', target='EDIT')
 
 
 @humans.route("/human/<int:human_id>/delete", methods=['POST'])
