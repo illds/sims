@@ -32,7 +32,7 @@
 
             svg.append("text")
                 .attr("x", width / 2 + {{ human.x }})
-                .attr("y", height / 2 - {{ human.y }} - 20)
+                .attr("y", height / 2 - {{ human.y }} -20)
                 .text("{{ human.name }}")
                 .attr("fill", "black")
                 .style("font-size", "10px")
@@ -66,8 +66,8 @@
                 });
 
             svg.append("text")
-                .attr("x", width / 2 + {{ pet.x }} + 3)
-                .attr("y", height / 2 - {{ pet.y }} - 20)
+                .attr("x", width / 2 + {{ pet.x }} +3)
+                .attr("y", height / 2 - {{ pet.y }} -20)
                 .text("{{ pet.name }}")
                 .attr("fill", "black")
                 .style("font-size", "10px")
@@ -90,8 +90,8 @@
                 });
 
             svg.append("text")
-                .attr("x", width / 2 + {{ house.x }} - 5)
-                .attr("y", height / 2 - {{ house.y }} - 20)
+                .attr("x", width / 2 + {{ house.x }} -5)
+                .attr("y", height / 2 - {{ house.y }} -20)
                 .text("House")
                 .attr("fill", "black")
                 .style("font-size", "10px")
@@ -123,8 +123,8 @@
                 });
 
             svg.append("text")
-                .attr("x", width / 2 + {{ vehicle.x }} - 5)
-                .attr("y", height / 2 - {{ vehicle.y }} - 20)
+                .attr("x", width / 2 + {{ vehicle.x }} -5)
+                .attr("y", height / 2 - {{ vehicle.y }} -20)
                 .text("{{ vehicle.plate }}")
                 .attr("fill", "black")
                 .style("font-size", "10px")
@@ -143,5 +143,6 @@
         <a href="{{ url_for('jobs.new_job') }}" class="btn btn-success mb-2">New Job</a>
         <br>
         <a href="{{ url_for('families.all_families') }}" class="btn btn-info mb-2">All Families</a>
+        <a href="{{ url_for('jobs.all_jobs') }}" class="btn btn-info mb-2">All Jobs</a>
     </div>
 {% endblock content %}
