@@ -83,6 +83,7 @@
                         {{ form.salary(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+                {% if target != 'EDIT' %}
                 <div class="form-group">
                     {{ form.x_coordinate.label(class="form-control-label") }}
                     {% if form.x_coordinate.errors %}
@@ -109,6 +110,7 @@
                         {{ form.y_coordinate(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+                {% endif %}
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}

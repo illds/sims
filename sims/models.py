@@ -42,12 +42,17 @@ class Gender(Enum):
     ATTACK_HELICOPTER = 'Attack Helicopter'
 
 
-class Job(Enum):
-    UNEMPLOYED = 'Unemployed'
-    DOCTOR = 'Doctor'
-    POLICEMAN = 'Policeman'
-    FIREFIGHTER = 'Firefighter'
-    MINER = 'Miner'
+# class Job(Enum):
+#     UNEMPLOYED = 'Unemployed'
+#     DOCTOR = 'Doctor'
+#     POLICEMAN = 'Policeman'
+#     FIREFIGHTER = 'Firefighter'
+#     MINER = 'Miner'
+
+class Jobs(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    salary = db.Column(db.Integer, nullable=False)
 
 
 class Human(db.Model):
@@ -56,10 +61,11 @@ class Human(db.Model):
     surname = db.Column(db.String(100), nullable=False)
     gender = db.Column(db.Enum(Gender), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    job = db.Column(db.Enum(Job), default=Job.UNEMPLOYED)
+    # job = db.Column(db.Enum(Job), default=Job.UNEMPLOYED)
     salary = db.Column(db.Integer, default=0)
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)
     y_coordinate = db.Column(db.Integer, nullable=False, default=0)
+    job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'))
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
     plumbob = db.Column(db.Enum(Plumbob), default=Plumbob.GREEN)
 

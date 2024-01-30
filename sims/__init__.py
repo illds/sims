@@ -14,7 +14,6 @@ login_manager.login_message_category = 'info'
 
 
 def create_app(config_class=Config):
-    print(os.environ.get('DB_URI'))
     app = Flask(__name__)
     app.config.from_object(Config)
 
@@ -30,6 +29,7 @@ def create_app(config_class=Config):
     from sims.families.routes import families
     from sims.houses.routes import houses
     from sims.vehicles.routes import vehicles
+    from sims.jobs.routes import jobs
     app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(humans)
@@ -37,5 +37,6 @@ def create_app(config_class=Config):
     app.register_blueprint(families)
     app.register_blueprint(houses)
     app.register_blueprint(vehicles)
+    app.register_blueprint(jobs)
 
     return app
