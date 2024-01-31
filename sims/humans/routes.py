@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
-from sims.humans.forms import HumanForm, HumanCoordinatesForm
-from sims.humans.procedures import update_human_location
+from sims.humans.forms import HumanForm, HumanCoordinatesForm, HumanJobForm
+from sims.humans.procedures import update_human_location, update_human_job
 from sims.models import Human, Family, Gender, Jobs
 from flask_login import login_required
 
@@ -117,20 +117,29 @@ def change_job(human_id):
     human = Human.query.get_or_404(human_id)
 
     form = HumanJobForm()
-    if form.validate_on_submit():
-        try:
-            job = Job(form.job.data)
-        except KeyError:
-            flash('Invalid job type', 'danger')
-            return redirect(url_for('main.home'))
 
-        human.job = job
+    # Think of something smarter
+    form.job.choices = [(job.id, job.name) for job in Jobs.query.all()]
+
+    if form.validate_on_submit():
+        # human.job_id = form.job.data
+        update_human_job(human.id, form.job.data)
+        db.session.commit()
         flash('Job has been changed!', 'success')
         return redirect(url_for('humans.human', human_id=human.id))
-    elif request.method == 'GET':
-        form.job.data = human.job
-    return render_template('humans/change_job.html', form=form, legend='Change Job', title='Update Job')
 
+    return render_template('humans/change_job.html', form=form, legend='Change Job',
+                           title='Change Job', human=human)
+
+
+@humans.route("/human/<int:human_id>/leave_job", methods=['POST'])
+def leave_job(human_id):
+    human = Human.query.get_or_404(human_id)
+    human.job_id = None
+
+    db.session.commit()
+    flash(f'{human.name} left the job!', 'success')
+    return redirect(url_for('humans.human', human_id=human.id))
 
 @humans.route("/human/<int:human_id>/change_coordinates", methods=['GET', 'POST'])
 def change_coordinates(human_id):

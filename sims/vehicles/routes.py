@@ -1,7 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
-from sims.houses.forms import HouseForm
-from sims.models import House, HouseType, Family, VehicleType, Color, Vehicle, Human
+from sims.models import VehicleType, Color, Vehicle, Human
 from flask_login import login_required
 
 from sims.vehicles.forms import VehicleForm, VehicleColorForm
@@ -95,7 +94,7 @@ def vehicle_add_human(vehicle_id, human_id):
 
     vehicle.human_id = human.id
     db.session.commit()
-    flash('Human has been added!', 'success')
+    flash('Owner has been added!', 'success')
     return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))
 
 
