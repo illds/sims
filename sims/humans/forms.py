@@ -13,7 +13,7 @@ class HumanForm(FlaskForm):
     gender = SelectField('Gender', choices=[(gender.value, gender.value) for gender in Gender],
                          validators=[DataRequired()])
     age = IntegerField('Age', validators=[InputRequired(), NumberRange(min=0, max=100)])
-    job = SelectField('Job', coerce=int)
+    job = SelectField('Job', coerce=int, default=None)
     x_coordinate = IntegerField('X coordinate', validators=[DataRequired(), NumberRange(min=-450, max=450)])
     y_coordinate = IntegerField('Y coordinate', validators=[DataRequired(), NumberRange(min=-200, max=200)])
     submit = SubmitField('Done')

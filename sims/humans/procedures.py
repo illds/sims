@@ -46,3 +46,6 @@ def update_human_job(human_id, new_job_id):
     )
 
     db.session.commit()
+
+
+

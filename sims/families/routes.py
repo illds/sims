@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.families.forms import FamilyForm
-from sims.models import Human, Family, Pet
+from sims.models import Human, Family, Pet, Jobs
 from flask_login import login_required
 
 families = Blueprint('families', __name__)
@@ -40,7 +40,9 @@ def get_family_money(family):
     humans_in_family = get_humans_in_family(family)
     total = 0
     for human in humans_in_family:
-        total += human.salary
+        job = Jobs.query.get(human.job_id)
+        if job:
+            total += job.salary
     return total
 
 @families.route("/family/<int:family_id>")

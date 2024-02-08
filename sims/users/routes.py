@@ -4,6 +4,8 @@ from sims.users.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from sims.models import User
 from flask_login import login_user, current_user, logout_user, login_required
 
+from sims.users.utils import save_picture
+
 users = Blueprint('users', __name__)
 
 

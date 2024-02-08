@@ -73,9 +73,11 @@ def update_human(human_id):
         flash('Your human has been updated!', 'success')
         return redirect(url_for('humans.human', human_id=human.id))
     elif request.method == 'GET':
+        form.gender.default = human.gender.value
+        form.process()
+
         form.name.data = human.name
         form.surname.data = human.surname
-        form.gender.data = human.gender
         form.age.data = human.age
 
     return render_template('humans/create_human.html', form=form, legend='Update Human',
@@ -122,11 +124,15 @@ def change_job(human_id):
     form.job.choices = [(job.id, job.name) for job in Jobs.query.all()]
 
     if form.validate_on_submit():
-        # human.job_id = form.job.data
         update_human_job(human.id, form.job.data)
+
         db.session.commit()
         flash('Job has been changed!', 'success')
         return redirect(url_for('humans.human', human_id=human.id))
+    elif request.method == 'GET':
+        job = Jobs.query.get(human.job_id)
+        form.job.default = job.id
+        form.process()
 
     return render_template('humans/change_job.html', form=form, legend='Change Job',
                            title='Change Job', human=human)
@@ -140,6 +146,7 @@ def leave_job(human_id):
     db.session.commit()
     flash(f'{human.name} left the job!', 'success')
     return redirect(url_for('humans.human', human_id=human.id))
+
 
 @humans.route("/human/<int:human_id>/change_coordinates", methods=['GET', 'POST'])
 def change_coordinates(human_id):

@@ -57,11 +57,14 @@ def update_house(house_id):
         flash('Your house has been updated!', 'success')
         return redirect(url_for('houses.house', house_id=house.id))
     elif request.method == 'GET':
-        form.type.data = house.type
+        form.type.default = house.type.value
+        form.process()
+
         form.room_number.data = house.room_number
         form.floor_number.data = house.floor_number
         form.x_coordinate.data = house.x_coordinate
         form.y_coordinate.data = house.y_coordinate
+
     return render_template('houses/create_house.html', form=form, legend='Update House', title='Update House')
 
 

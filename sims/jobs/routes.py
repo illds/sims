@@ -57,6 +57,8 @@ def update_job(job_id):
 def delete_job(job_id):
     job = Jobs.query.get_or_404(job_id)
 
+    Human.query.filter_by(job_id=job.id).update({Human.job_id: None})
+
     db.session.delete(job)
     db.session.commit()
     flash('Job has been deleted!', 'success')

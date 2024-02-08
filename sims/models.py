@@ -41,14 +41,6 @@ class Gender(Enum):
     FEMALE = 'Female'
     ATTACK_HELICOPTER = 'Attack Helicopter'
 
-
-# class Job(Enum):
-#     UNEMPLOYED = 'Unemployed'
-#     DOCTOR = 'Doctor'
-#     POLICEMAN = 'Policeman'
-#     FIREFIGHTER = 'Firefighter'
-#     MINER = 'Miner'
-
 class Jobs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -65,7 +57,7 @@ class Human(db.Model):
     # salary = db.Column(db.Integer, default=0)
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)
     y_coordinate = db.Column(db.Integer, nullable=False, default=0)
-    job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'))
+    job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), default=0)
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
     plumbob = db.Column(db.Enum(Plumbob), default=Plumbob.GREEN)
 

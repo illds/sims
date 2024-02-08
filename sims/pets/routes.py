@@ -57,9 +57,11 @@ def update_pet(pet_id):
         flash('Your pet has been updated!', 'success')
         return redirect(url_for('pets.pet', pet_id=pet.id))
     elif request.method == 'GET':
+        form.gender.default = pet.gender.value
+        form.type.default = pet.type.value
+        form.process()
+
         form.name.data = pet.name
-        form.type.data = pet.type
-        form.gender.data = pet.gender
         form.age.data = pet.age
         form.x_coordinate.data = pet.x_coordinate
         form.y_coordinate.data = pet.y_coordinate

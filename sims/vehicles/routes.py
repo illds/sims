@@ -4,6 +4,7 @@ from sims.models import VehicleType, Color, Vehicle, Human
 from flask_login import login_required
 
 from sims.vehicles.forms import VehicleForm, VehicleColorForm
+from sims.vehicles.procedures import update_vehicle_color
 
 vehicles = Blueprint('vehicles', __name__)
 
@@ -59,9 +60,11 @@ def update_vehicle(vehicle_id):
         flash('Your vehicle has been updated!', 'success')
         return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))
     elif request.method == 'GET':
+        form.type.default = vehicle.type.value
+        form.color.default = vehicle.color.value
+        form.process()
+
         form.plate.data = vehicle.plate
-        form.type.data = vehicle.type
-        form.color.data = vehicle.color
         form.x_coordinate.data = vehicle.x_coordinate
         form.y_coordinate.data = vehicle.y_coordinate
     return render_template('vehicles/create_vehicle.html', form=form, legend='Update Vehicle', title='Update Vehicle')
@@ -113,17 +116,21 @@ def vehicle_delete_human(vehicle_id):
 def change_color(vehicle_id):
     vehicle = Vehicle.query.get_or_404(vehicle_id)
 
-    form = VehicleColorForm()
+    form = VehicleColorForm(color=2)
     if form.validate_on_submit():
         try:
             color = Color(form.color.data)
         except KeyError:
             flash('Invalid color type', 'danger')
             return redirect(url_for('main.home'))
-        vehicle.color = color
+
+        update_vehicle_color(vehicle_id, color.name)
         db.session.commit()
         flash('Color has been changed!', 'success')
         return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))
     elif request.method == 'GET':
-        form.color.data = vehicle.color
+        form.color.default = vehicle.color.value
+        form.process()
+
+
     return render_template('vehicles/change_color.html', form=form, legend='Change Color', title='Update Color')
