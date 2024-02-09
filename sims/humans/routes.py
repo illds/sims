@@ -131,8 +131,9 @@ def change_job(human_id):
         return redirect(url_for('humans.human', human_id=human.id))
     elif request.method == 'GET':
         job = Jobs.query.get(human.job_id)
-        form.job.default = job.id
-        form.process()
+        if job:
+            form.job.default = job.id
+            form.process()
 
     return render_template('humans/change_job.html', form=form, legend='Change Job',
                            title='Change Job', human=human)

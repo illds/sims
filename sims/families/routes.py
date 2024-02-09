@@ -1,6 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from sims import db
 from sims.families.forms import FamilyForm
+from sims.families.procedures import get_family_money, get_family_members
 from sims.models import Human, Family, Pet, Jobs
 from flask_login import login_required
 
@@ -25,34 +26,19 @@ def new_family():
                            form=form, legend='New Family')
 
 
-def get_humans_in_family(family):
-    # Получить всех членов семьи (людей)
-    return Human.query.filter_by(family_id=family.id).all()
-
-
 def get_pets_in_family(family):
     # Получить всех членов семьи (питомцев)
     return Pet.query.filter_by(family_id=family.id).all()
 
 
-def get_family_money(family):
-    # Получить зар. плату всех членов семьи
-    humans_in_family = get_humans_in_family(family)
-    total = 0
-    for human in humans_in_family:
-        job = Jobs.query.get(human.job_id)
-        if job:
-            total += job.salary
-    return total
-
 @families.route("/family/<int:family_id>")
 def family(family_id):
     family = Family.query.get_or_404(family_id)
-    humans_in_family = get_humans_in_family(family)
+    humans_in_family = get_family_members(family_id)
     pets_in_family = get_pets_in_family(family)
     return render_template('families/family.html', family=family,
                            humans_in_family=humans_in_family, pets_in_family=pets_in_family,
-                           total_money=get_family_money(family))
+                           total_money=get_family_money(family_id))
 
 
 @families.route("/family/<int:family_id>/update", methods=['GET', 'POST'])
@@ -128,7 +114,6 @@ def human_join_family(family_id, human_id):
         flash(f'{human.name} doesn\'t have {family.name} surname.', 'danger')
         return redirect(url_for('humans.human', human_id=human.id))
 
-
     human.family_id = family_id
     db.session.commit()
 
@@ -147,5 +132,3 @@ def pet_join_family(family_id, pet_id):
 
     flash(f'{pet.name} has joined {family.name} family!', 'success')
     return redirect(url_for('pets.pet', pet_id=pet.id))
-
-
