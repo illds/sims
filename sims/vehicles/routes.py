@@ -4,7 +4,6 @@ from sims.models import VehicleType, Color, Vehicle, Human
 from flask_login import login_required
 
 from sims.vehicles.forms import VehicleForm, VehicleColorForm
-from sims.vehicles.procedures import update_vehicle_color
 
 vehicles = Blueprint('vehicles', __name__)
 
@@ -124,7 +123,7 @@ def change_color(vehicle_id):
             flash('Invalid color type', 'danger')
             return redirect(url_for('main.home'))
 
-        update_vehicle_color(vehicle_id, color.name)
+        vehicle.color = color
         db.session.commit()
         flash('Color has been changed!', 'success')
         return redirect(url_for('vehicles.vehicle', vehicle_id=vehicle.id))

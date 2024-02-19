@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from enum import Enum
 
 from sims import db, login_manager
@@ -41,6 +39,7 @@ class Gender(Enum):
     FEMALE = 'Female'
     ATTACK_HELICOPTER = 'Attack Helicopter'
 
+
 class Jobs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -53,8 +52,6 @@ class Human(db.Model):
     surname = db.Column(db.String(100), nullable=False)
     gender = db.Column(db.Enum(Gender), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    # job = db.Column(db.Enum(Job), default=Job.UNEMPLOYED)
-    # salary = db.Column(db.Integer, default=0)
     x_coordinate = db.Column(db.Integer, nullable=False, default=0)
     y_coordinate = db.Column(db.Integer, nullable=False, default=0)
     job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), default=0)
@@ -85,7 +82,7 @@ class Pet(db.Model):
     plumbob = db.Column(db.Enum(Plumbob), default=Plumbob.GREEN)
 
     def __repr__(self):
-        return f"Human('{self.name}', '{self.id}', x={self.x_coordinate}, y={self.y_coordinate})"
+        return f"Pet('{self.name}', '{self.id}', x={self.x_coordinate}, y={self.y_coordinate})"
 
 
 class HouseType(Enum):
